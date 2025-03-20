@@ -20,6 +20,10 @@ intellij {
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
+intellij {
+    plugins.set(listOf("Git4Idea"))
+}
+
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
