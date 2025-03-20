@@ -28,4 +28,21 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Extensions can be added here if required in the future. -->
     </extensions>
+
+    <!-- Define actions separately -->
+    <actions>
+        <!-- Action definition -->
+        <action id="com.rbbozkurt.renameCommit"
+                class="com.rbbozkurt.renamecommit.RenameCommitAction"
+                text="Rename Current Commit"
+                description="Renames the latest Git commit">
+            <!-- Add to Git menu directly -->
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
+
+            <!-- Keep in VCS Operations Popup as well -->
+            <add-to-group group-id="Vcs.Operations.Popup" anchor="last"/>
+        </action>
+    </actions>
+
+
 </idea-plugin>
