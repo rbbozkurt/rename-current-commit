@@ -13,10 +13,24 @@ import git4idea.commands.GitLineHandler
 import git4idea.repo.GitRepositoryManager
 import java.io.File
 
+/**
+ * An IntelliJ action that allows users to rename the latest **unpushed** Git commit.
+ * This action is available in the **Git toolbar** and **VCS Operations Popup**.
+ */
 class RenameCommitAction : AnAction() {
 
     private val logger = Logger.getInstance(RenameCommitAction::class.java)
 
+    /**
+     * Handles the action event when the user selects "Rename Current Commit".
+     * - Verifies if a Git repository exists.
+     * - Checks for unpushed commits.
+     * - Fetches the latest commit message.
+     * - Prompts the user for a new commit message.
+     * - Amends the commit with the new message.
+     *
+     * @param event The action event triggered from the JetBrains IDE.
+     */
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project ?: return
         val repository = GitRepositoryManager.getInstance(project).repositories.firstOrNull()
@@ -61,6 +75,13 @@ class RenameCommitAction : AnAction() {
         renameLastCommit(project, repository.root.path, newCommitMessage)
     }
 
+    /**
+     * Renames (amends) the latest unpushed commit with a new commit message.
+     *
+     * @param project The current JetBrains project.
+     * @param repositoryPath The root path of the Git repository.
+     * @param newMessage The new commit message entered by the user.
+     */
     private fun renameLastCommit(project: Project, repositoryPath: String, newMessage: String) {
         val git = Git.getInstance()
         val gitRoot = File(repositoryPath)
@@ -82,6 +103,13 @@ class RenameCommitAction : AnAction() {
         }
     }
 
+    /**
+     * Checks if there are any unpushed commits in the repository.
+     *
+     * @param project The current JetBrains project.
+     * @param repositoryPath The root path of the Git repository.
+     * @return `true` if unpushed commits exist, `false` otherwise.
+     */
     private fun hasUnpushedCommits(project: Project, repositoryPath: String): Boolean {
         val git = Git.getInstance()
         val gitRoot = File(repositoryPath)
@@ -93,6 +121,13 @@ class RenameCommitAction : AnAction() {
         return result.success() && result.output.isNotEmpty()
     }
 
+    /**
+     * Retrieves the commit message of the latest commit.
+     *
+     * @param project The current JetBrains project.
+     * @param repositoryPath The root path of the Git repository.
+     * @return The latest commit message or a fallback message if unavailable.
+     */
     private fun getLastCommitMessage(project: Project, repositoryPath: String): String {
         val git = Git.getInstance()
         val gitRoot = File(repositoryPath)
